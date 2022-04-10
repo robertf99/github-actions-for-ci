@@ -26,22 +26,20 @@ jobs:
     
   test:
     needs: build
+    runs-on: ubuntu-latest
     strategy:
-      - uses: actions/upload-artifact@master
-        with:
-          name: webpack artifacts
-          path: public/
+      matrix:
         os: [ubuntu-latest, windows-2016]
         node-version: [12.x, 14.x]
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
     - uses: actions/download-artifact@main
       with:
         name: webpack artifacts
         path: public
-    - name: npm install, and test
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, and test
       run: |
